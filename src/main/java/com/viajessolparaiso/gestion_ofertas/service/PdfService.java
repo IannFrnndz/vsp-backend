@@ -6,17 +6,19 @@ import org.apache.pdfbox.text.PDFTextStripper;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-
 @Service
 public class PdfService {
 
-    public String extraerTexto(MultipartFile file) throws IOException {
+    public String extraerTexto(MultipartFile file) throws Exception {
 
-        try (PDDocument document = Loader.loadPDF(file.getInputStream().readAllBytes())) {
+        PDDocument document = Loader.loadPDF(file.getBytes());
 
-            PDFTextStripper stripper = new PDFTextStripper();
-            return stripper.getText(document);
-        }
+        PDFTextStripper stripper = new PDFTextStripper();
+
+        String texto = stripper.getText(document);
+
+        document.close();
+
+        return texto;
     }
 }
