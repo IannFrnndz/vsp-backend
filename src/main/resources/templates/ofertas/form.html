@@ -16,6 +16,16 @@
             <span th:unless="${oferta.id == null}">Editar Oferta</span>
         </h1>
 
+        <form action="/ofertas/probar-pdf" method="post" enctype="multipart/form-data">
+
+            <input type="file" name="file">
+
+            <button type="submit" class="btn btn-primary">
+                Probar PDF
+            </button>
+
+        </form>
+
         <div class="card">
             <div class="card-body">
                 <form th:action="@{/ofertas/guardar}" th:object="${oferta}" method="post">

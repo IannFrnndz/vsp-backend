@@ -4,16 +4,21 @@ import com.viajessolparaiso.gestion_ofertas.config.CustomUserDetails;
 import com.viajessolparaiso.gestion_ofertas.entity.Oferta;
 import com.viajessolparaiso.gestion_ofertas.service.OfertaService;
 import com.viajessolparaiso.gestion_ofertas.entity.Categoria;
+import com.viajessolparaiso.gestion_ofertas.service.PdfService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+
 
 @Controller
 @RequestMapping("/ofertas")
 @RequiredArgsConstructor
 public class OfertaController {
+    private final PdfService pdfService;
 
     private final OfertaService ofertaService;
 
@@ -39,6 +44,15 @@ public class OfertaController {
         model.addAttribute("oferta", oferta);
         model.addAttribute("usuario", userDetails.getUsuario());
         return "ofertas/detail";
+    }
+    // EXTRACCION DE TEXTO
+    @PostMapping("/probar-pdf")
+    @ResponseBody
+    public String probarPdf(
+            @RequestParam("file") MultipartFile file
+    ) throws Exception {
+
+        return pdfService.extraerTexto(file);
     }
 
     // FORMULARIO PARA CREAR NUEVA OFERTA
