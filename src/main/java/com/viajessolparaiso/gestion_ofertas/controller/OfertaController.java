@@ -13,8 +13,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-
-
 @Controller
 @RequestMapping("/ofertas")
 @RequiredArgsConstructor
@@ -85,8 +83,7 @@ public class OfertaController {
 
             e.printStackTrace();
 
-            model.addAttribute("oferta", new Oferta());
-            model.addAttribute("error", "Error procesando PDF");
+            throw new RuntimeException(e);
         }
 
         model.addAttribute("usuario", userDetails.getUsuario());

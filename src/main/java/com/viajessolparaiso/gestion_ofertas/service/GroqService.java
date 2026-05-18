@@ -24,6 +24,8 @@ public class GroqService {
 
     public OfertaPdfData analizarTexto(String textoPdf) throws Exception {
 
+        System.out.println("=== INICIANDO ANALISIS IA ===");
+
         WebClient webClient = WebClient.builder()
                 .baseUrl(apiUrl)
                 .defaultHeader(HttpHeaders.AUTHORIZATION, "Bearer " + apiKey)
@@ -79,11 +81,18 @@ public class GroqService {
                 }
                 """.formatted(objectMapper.writeValueAsString(prompt));
 
+
+        System.out.println("=== ENVIANDO PETICION A GROQ ===");
+        System.out.println(body);
+
         String response = webClient.post()
                 .bodyValue(body)
                 .retrieve()
                 .bodyToMono(String.class)
                 .block();
+
+        System.out.println("=== RESPUESTA RECIBIDA ===");
+        System.out.println(response);
 
         JsonNode root = objectMapper.readTree(response);
 
@@ -93,6 +102,14 @@ public class GroqService {
                 .path("message")
                 .path("content")
                 .asText();
+
+        content = content
+                .replace("```json", "")
+                .replace("```", "")
+                .trim();
+
+        System.out.println("=== JSON LIMPIO ===");
+        System.out.println(content);
 
         return objectMapper.readValue(content, OfertaPdfData.class);
     }
