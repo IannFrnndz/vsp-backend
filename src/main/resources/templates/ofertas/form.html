@@ -15,6 +15,9 @@
             <span th:if="${oferta.id == null}">Nueva Oferta</span>
             <span th:unless="${oferta.id == null}">Editar Oferta</span>
         </h1>
+        <div th:if="${error}" class="alert alert-danger">
+            <span th:text="${error}"></span>
+        </div>
 
         <form action="/ofertas/probar-pdf" method="post" enctype="multipart/form-data">
 
