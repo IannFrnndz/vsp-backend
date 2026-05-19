@@ -91,7 +91,7 @@ public class GroqService {
         - Si existen listas de servicios o visitas, conviértelas en puntos resumidos
         - La descripcion debe ser clara y fácil de leer
         - NO uses saltos de línea reales
-        - Usa \\n para separar líneas en el JSON
+        - Usa \\n para separar líneas en el JSON 
         - Máximo 800 caracteres
         - La última línea de la descripcion debe ser SIEMPRE:
           PRECIO DESDE: X€
@@ -150,6 +150,14 @@ public class GroqService {
         System.out.println("=== JSON LIMPIO ===");
         System.out.println(content);
 
-        return objectMapper.readValue(content, OfertaPdfData.class);
+        OfertaPdfData data = objectMapper.readValue(content, OfertaPdfData.class);
+
+        if (data.getDescripcion() != null) {
+            data.setDescripcion(
+                    data.getDescripcion().replace("\\n", "\n")
+            );
+        }
+
+        return data;
     }
 }
