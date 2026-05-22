@@ -9,6 +9,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.scheduling.annotation.Scheduled;
 import java.time.LocalDate;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -49,6 +52,59 @@ public class OfertaService {
             ofertaRepository.save(oferta);
 
         }
+    }
+    // Paginacion para la lista de ofertas
+    public Page<Oferta> findPaginated(int page, int size) {
+
+        Pageable pageable = PageRequest.of(page, size);
+
+        return ofertaRepository.findAll(pageable);
+    }
+    //Buscacador de ofertas por el nombre
+    public Page<Oferta> buscarPorTitulo(
+            String titulo,
+            int page,
+            int size
+    ) {
+
+        Pageable pageable = PageRequest.of(page, size);
+
+        return ofertaRepository.findByTituloContainingIgnoreCase(
+                titulo,
+                pageable
+        );
+    }
+
+    // filtrar solo por categoria
+    public Page<Oferta> buscarPorCategoria(
+            Categoria categoria,
+            int page,
+            int size
+    ) {
+
+        Pageable pageable = PageRequest.of(page, size);
+
+        return ofertaRepository.findByCategoria(
+                categoria,
+                pageable
+        );
+    }
+    // Filtrar por el nombre y la categoria
+    public Page<Oferta> buscarPorTituloYCategoria(
+            String titulo,
+            Categoria categoria,
+            int page,
+            int size
+    ) {
+
+        Pageable pageable = PageRequest.of(page, size);
+
+        return ofertaRepository
+                .findByTituloContainingIgnoreCaseAndCategoria(
+                        titulo,
+                        categoria,
+                        pageable
+                );
     }
 
     // Crear o actualizar oferta
